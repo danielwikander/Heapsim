@@ -18,7 +18,8 @@ public class MemoryBlock {
     }
 
     // Get & Sets
-    public int getsize() {return size;}
+    public int getSize() {return size;}
+    public void setSize(int size) {this.size = size;}
     public Pointer getPointer() {return pointer;}
     public void setPointer(Pointer pointer) {this.pointer = pointer;}
 }
