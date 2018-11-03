@@ -14,7 +14,8 @@ import java.util.LinkedList;
 public class FirstFit extends Memory {
 
     private LinkedList<MemoryBlock> freeMemory = new LinkedList<MemoryBlock>();
-    private HashMap<Pointer, Integer> allocatedMemory = new HashMap<Pointer, Integer>();
+    // Key is address, value is size
+    private HashMap<Integer, Integer> allocatedMemory = new HashMap<Integer, Integer>();
     private int size;
 
     /**
@@ -25,7 +26,7 @@ public class FirstFit extends Memory {
     public FirstFit(int size) {
         super(size);
         this.size = size;
-        Pointer firstPointer = new Pointer(0, this);
+        // Pointer firstPointer = new Pointer(0, this);
         MemoryBlock initialBlock = new MemoryBlock(size, firstPointer);
         freeMemory.add(initialBlock);
     }
@@ -61,7 +62,7 @@ public class FirstFit extends Memory {
         // MemoryBlock memoryBlockToAllocate = new MemoryBlock(size, newPointer);
 
         // Allocates the memory in the allocatedMemory map.
-        allocatedMemory.put(newPointer, size);
+        allocatedMemory.put(memoryAddress, size);
 
         // Updates the freeMemory, changing the size of the available space.
         Pointer newFreeBlockPointer = new Pointer(memoryAddress + size + 1, this);
@@ -83,7 +84,7 @@ public class FirstFit extends Memory {
 
         boolean mergePreviousBlock = false;
         boolean mergeSubsequentBlock = false;
-        int allocatedMemoryBlockSize = allocatedMemory.get(p);
+        int allocatedMemoryBlockSize = allocatedMemory.get(p.pointsAt());
 
         // The following loops check for available blocks before and after the
         // allocated memory. If found, it merges the block with the newly released block.
@@ -120,7 +121,7 @@ public class FirstFit extends Memory {
         }
 
         // Finally remove the memory from the allocated list.
-        allocatedMemory.remove(p);
+        allocatedMemory.remove(p.pointsAt());
     }
 
     /**
@@ -134,7 +135,7 @@ public class FirstFit extends Memory {
     @Override
     public void printLayout() {
         // TODO
-        String format = "| %4d - %4d | %s";
+        String format = "| %4d - %4d | %s \n";
         int currentAddress = 0;
 
         while (currentAddress < size) {
@@ -143,15 +144,14 @@ public class FirstFit extends Memory {
             for (int j = 0; j < freeMemory.size(); j++) {
                 if (freeMemory.get(j).getPointer().pointsAt() == currentAddress) {
                     System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize(), "Free");
-                    currentAddress += freeMemory.get(j).getSize() - 1;
+                    currentAddress += freeMemory.get(j).getSize();
                     foundInFree = true;
                     break;
                 }
             }
             // If the block was found in the freeMemory list, fetch it from the allocated memory map.
             if (!foundInFree) {
-                Pointer addressToAllocated = new Pointer(currentAddress, this);
-                int BlockSize = allocatedMemory.get(addressToAllocated);
+                int BlockSize = allocatedMemory.get(currentAddress + 1);
                 System.out.format(format, currentAddress, currentAddress + BlockSize, "Allocated");
                 currentAddress += size -1;
             }
