@@ -5,23 +5,28 @@ package memory;
  */
 public class MemoryBlock {
 
+    private int address;
     private int size;
-    private Pointer pointer;
 
-    public MemoryBlock(int size, Pointer pointer) {
-        this.size = size;
-        this.pointer = pointer;
-    }
-
-    public MemoryBlock(int size) {
+    public MemoryBlock(int address, int size) {
+        this.address = address;
         this.size = size;
     }
+
+    //  public MemoryBlock(int size) {
+    //   this.size = size;
+    //}
 
     // Get & Sets
+    public int getAddress() {
+        return address;
+    }
+    public void setAddress(int address) {
+        this.address = address;
+    }
     public int getSize() {return size;}
     public void setSize(int size) {this.size = size;}
-    public Pointer getPointer() {return pointer;}
-    public void setPointer(Pointer pointer) {this.pointer = pointer;}
+
 }
 
 
