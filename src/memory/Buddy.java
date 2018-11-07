@@ -1,8 +1,5 @@
 package memory;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-
 /**
  * This memory model allocates memory cells based on the buddy method.
  *
@@ -11,10 +8,6 @@ import java.util.LinkedList;
  */
 public class Buddy extends Memory {
 
-    private LinkedList<BuddyMemoryBlock> freeMemory = new LinkedList<BuddyMemoryBlock>();
-    private HashMap<Integer, Integer> allocatedMemory = new HashMap<Integer, Integer>(); // address -> size
-    private int size; // size of memory
-
     /**
      * Initializes an instance of a buddy-based memory.
      *
@@ -22,8 +15,6 @@ public class Buddy extends Memory {
      */
     public Buddy(int size) {
         super(size);
-        BuddyMemoryBlock initialBlock = new BuddyMemoryBlock(0, size);
-        freeMemory.add(initialBlock);
     }
 
     /**
@@ -35,8 +26,6 @@ public class Buddy extends Memory {
     @Override
     public Pointer alloc(int size) {
         // TODO Implement this!
-
-
         return null;
     }
 
@@ -60,26 +49,6 @@ public class Buddy extends Memory {
      */
     @Override
     public void printLayout() {
-        String format = "| %4d - %4d | %s \n";
-        int currentAddress = 0;
-
-        while (currentAddress < size) {
-            boolean foundInFree = false;
-            // Search through the freeMemory list for a block allocated on the current address.
-            for (int j = 0; j < freeMemory.size(); j++) {
-                if (freeMemory.get(j).getAddress() == currentAddress) {
-                    System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize(), "Free");
-                    currentAddress += freeMemory.get(j).getSize();
-                    foundInFree = true;
-                    break;
-                }
-            }
-            // If the block was found in the freeMemory list, fetch it from the allocated memory map.
-            if (!foundInFree) {
-                int BlockSize = allocatedMemory.get(currentAddress);
-                System.out.format(format, currentAddress, currentAddress + BlockSize, "Allocated");
-                currentAddress += BlockSize;
-            }
-        }
+       // TODO Implement this!
     }
 }
