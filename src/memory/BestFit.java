@@ -124,7 +124,6 @@ public class BestFit extends Memory {
         if (!mergePreviousBlock && !mergeSubsequentBlock) {
             MemoryBlock newFreeMemoryBlock = new MemoryBlock(p.pointsAt(), allocatedMemoryBlockSize);
             freeMemory.add(newFreeMemoryBlock);
-            // TODO check if it can now be merged (?)
         }
 
         // Finally remove the memory from the allocated list.

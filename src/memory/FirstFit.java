@@ -36,7 +36,7 @@ public class FirstFit extends Memory {
      */
     @Override
     public Pointer alloc(int size) {
-
+        // TODO OK if algorithm allocates on first available memory in list instead of first available physical space?
         int freeMemoryIndex = 0;
         int memoryAddress = -1;
         // Loop through the freeMemory list to find the first

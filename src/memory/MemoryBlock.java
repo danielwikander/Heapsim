@@ -13,10 +13,6 @@ public class MemoryBlock {
         this.size = size;
     }
 
-    //  public MemoryBlock(int size) {
-    //   this.size = size;
-    //}
-
     // Get & Sets
     public int getAddress() {
         return address;
