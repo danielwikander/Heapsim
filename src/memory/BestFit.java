@@ -149,7 +149,7 @@ public class BestFit extends Memory {
             // Search through the freeMemory list for a block allocated on the current address.
             for (int j = 0; j < freeMemory.size(); j++) {
                 if (freeMemory.get(j).getAddress() == currentAddress) {
-                    System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize(), "Free");
+                    System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize() -1, "Free");
                     currentAddress += freeMemory.get(j).getSize();
                     foundInFree = true;
                     break;
@@ -158,7 +158,7 @@ public class BestFit extends Memory {
             // If the block was found in the freeMemory list, fetch it from the allocated memory map.
             if (!foundInFree) {
                 int BlockSize = allocatedMemory.get(currentAddress);
-                System.out.format(format, currentAddress, currentAddress + BlockSize, "Allocated");
+                System.out.format(format, currentAddress, currentAddress + BlockSize -1, "Allocated");
                 currentAddress += BlockSize;
             }
         }

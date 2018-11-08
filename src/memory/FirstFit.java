@@ -36,7 +36,6 @@ public class FirstFit extends Memory {
      */
     @Override
     public Pointer alloc(int size) {
-        // TODO OK if algorithm allocates on first available memory in list instead of first available physical space?
         int freeMemoryIndex = 0;
         int memoryAddress = -1;
         // Loop through the freeMemory list to find the first
@@ -108,7 +107,7 @@ public class FirstFit extends Memory {
             // If there is an available memoryblock at the end of the memory to be released
             // it merges the blocks.
             if (p.pointsAt() + allocatedMemoryBlockSize == freeMemory.get(i).getAddress()) {
-                if(mergePreviousBlock) {
+                if (mergePreviousBlock) {
                     freeMemory.get(previousMergeIndex).setSize(freeMemory.get(previousMergeIndex).getSize() + freeMemory.get(i).getSize());
                     freeMemory.remove(i);
                 } else {
@@ -122,7 +121,28 @@ public class FirstFit extends Memory {
         // If it didn't merge previous or subsequent blocks, add new space to freeMemory.
         if (!mergePreviousBlock && !mergeSubsequentBlock) {
             MemoryBlock newFreeMemoryBlock = new MemoryBlock(p.pointsAt(), allocatedMemoryBlockSize);
-            freeMemory.addFirst(newFreeMemoryBlock);
+
+            boolean foundPlacement = false;
+
+            // If the list is empty it adds memory to the start of the list
+            if(freeMemory.isEmpty()) {
+                freeMemory.add(0, newFreeMemoryBlock);
+            }
+            // If the pointer is pointing to an address smaller than the first in the freememory list
+            // it adds the memory to start of the list.
+            if (p.pointsAt() < freeMemory.get(0).getAddress()) {
+                freeMemory.add(0, newFreeMemoryBlock);
+                foundPlacement = true;
+            }
+            if (!foundPlacement) {
+
+                for (int i = 0; i < freeMemory.size(); i++) {
+                    if (p.pointsAt() < freeMemory.get(i).getAddress()) {
+                        freeMemory.add(i, newFreeMemoryBlock);
+                        break;
+                    }
+                }
+            }
         }
 
         // Finally remove the memory from the allocated list.
@@ -147,7 +167,7 @@ public class FirstFit extends Memory {
             // Search through the freeMemory list for a block allocated on the current address.
             for (int j = 0; j < freeMemory.size(); j++) {
                 if (freeMemory.get(j).getAddress() == currentAddress) {
-                    System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize(), "Free");
+                    System.out.format(format, currentAddress, currentAddress + freeMemory.get(j).getSize() -1, "Free");
                     currentAddress += freeMemory.get(j).getSize();
                     foundInFree = true;
                     break;
@@ -156,7 +176,7 @@ public class FirstFit extends Memory {
             // If the block was found in the freeMemory list, fetch it from the allocated memory map.
             if (!foundInFree) {
                 int BlockSize = allocatedMemory.get(currentAddress);
-                System.out.format(format, currentAddress, currentAddress + BlockSize, "Allocated");
+                System.out.format(format, currentAddress, currentAddress + BlockSize -1, "Allocated");
                 currentAddress += BlockSize;
             }
         }
