@@ -5,9 +5,6 @@ import java.util.LinkedList;
 
 /**
  * This memory model allocates memory cells based on the best-fit method.
- * 
- * @author "Johan Holmberg, Malmö university"
- * @since 1.0
  */
 public class BestFit extends Memory {
 
